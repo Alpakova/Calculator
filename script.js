@@ -4,11 +4,12 @@ const inputBuffer = [];
 Array.prototype.last = function() {
     return this[this.length - 1];
 }
+const isMathPoint = symbol => ['.'].includes(symbol);
 const isMathSign = symbol => ['-', '+', '÷', '×', '%'].includes(symbol);
 const displayExpresion = (buffer) => {
     display.value = buffer.map(item => Array.isArray(item) ? item.join('') : item).join(' ');
 }
-const isMathPoint = symbol => ['.'].includes(symbol);
+
 
 const updateInput = (symbol) => {
     const lastBufferItem = inputBuffer.last();
@@ -24,11 +25,13 @@ const updateInput = (symbol) => {
         } else {
             inputBuffer.push(symbol);
         }
-    } else if (isMathSign(symbol) && inputBuffer.length) {
-        if (isMathSign(inputBuffer.last())) {
-            inputBuffer[inputBuffer.length - 1] = symbol;
+    } else if (isMathPoint(symbol)) {
+        if (isArrayLastItem) {
+            if (!lastBufferItem.includes(symbol)) {
+                lastBufferItem.push(symbol);
+            }
         } else {
-            inputBuffer.push(symbol);
+            inputBuffer.push([0, '.']);
         }
     } else {
         if (isArrayLastItem || isMathPoint(symbol)) {
@@ -48,7 +51,6 @@ buttons.forEach(button => {
     });
 });
 
-123
 // input: 2 -> output: [[2]]
 // input: 3 -> output: [[2, 3]]
 // input: '+' -> output: [[2, 3], '+']
