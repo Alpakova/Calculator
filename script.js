@@ -1,3 +1,20 @@
+document.addEventListener('mousemove',
+    function (e){
+        const body = document.querySelector('body');
+        const snow = document.createElement('span');
+        let x = e.offsetX;
+        let y = e.offsetY;
+        snow.style.left = x + 'px';
+        snow.style.top = y + 'px';
+        let size = Math.random()*60;
+        snow.style.width = 20 + size + 'px';
+        snow.style.height = 20 + size + 'px';
+        body.appendChild(snow);
+        setTimeout(function () {
+            snow.remove();
+        }, 1800);
+    })
+
 const buttons = document.querySelectorAll('input[value]');
 const display = document.getElementById('input');
 const inputBuffer = [];
@@ -19,10 +36,14 @@ const updateInput = (symbol) => {
         inputBuffer.pop();
     } else if (symbol === 'C') {
         inputBuffer.splice(0, inputBuffer.length);
-    } else if (isMathSign(symbol) && inputBuffer.length) {
-        if (isMathSign(inputBuffer.last())) {
-            inputBuffer[inputBuffer.length - 1] = symbol;
-        } else {
+    } else if (isMathSign(symbol)) {
+        if (inputBuffer.length) {
+            if (isMathSign(inputBuffer.last())) {
+                inputBuffer[inputBuffer.length - 1] = symbol;
+            } else {
+                inputBuffer.push(symbol);
+            }
+        } else if (symbol === '-') {
             inputBuffer.push(symbol);
         }
     } else if (isMathPoint(symbol)) {
@@ -57,7 +78,3 @@ buttons.forEach(button => {
 // input: 0 -> output: [[2, 3], '+', [0]]
 // input: '.' -> output: [[2, 3], '+', [0, '.']]
 // input: 5 -> output: [[2, 3], '+', [0, '.', 5]]
-
-//если в инпуте нет чисел и мы нажимаем точку то создается массив  [0,...]
-// в одном массиве с числами может быть только одна точка может быть
-// точка не может быть последним елементов в массиве чисел если так то она не учитывается
